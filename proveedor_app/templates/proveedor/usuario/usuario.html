@@ -3,15 +3,15 @@
 
 {% block title %}Gestión de Usuarios{% endblock %}
 
-{% block styles %}
-<link rel="stylesheet" href="{% static 'tablas/usuario.css' %}">
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'Tablas/usuario.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="container py-5">
     <h1 class="mb-4 text-center">Gestión de Usuarios</h1>
 
-    <!-- Buscador y botón -->
+    <!-- Search and action button -->
     <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
         <div class="search-wrapper flex-grow-1 d-flex">
             <input type="text" id="busquedaUsuario" class="form-control search-input" placeholder="Buscar usuario...">
@@ -24,7 +24,7 @@
         </button>
     </div>
 
-    <!-- Tabla -->
+    <!-- Data table -->
     <h2 class="mt-5 text-center">Lista de Usuarios</h2>
     <div class="table-responsive">
         <table class="table table-bordered table-striped align-middle">
@@ -77,7 +77,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal dialog -->
 <div class="modal fade" id="usuarioModal" tabindex="-1" aria-labelledby="usuarioModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -109,7 +109,7 @@
     </div>
 </div>
 
-<!-- CSS modal flotante y z-index -->
+<!-- Floating modal CSS and z-index -->
 <style>
 .modal-dialog {
     max-width: 800px;
@@ -126,13 +126,13 @@
 }
 </style>
 
-<!-- Gráfico de usuarios -->
+<!-- Users chart -->
 <div class="my-4">
     <h4 class="text-center">Usuarios por Rol</h4>
     <canvas id="usuariosRolChart" width="200" height="25"></canvas>
 </div>
 
-<!-- JS buscador -->
+<!-- Search JS -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const input = document.getElementById('busquedaUsuario');
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<!-- Mensajes de éxito -->
+<!-- Success messages -->
 {% if messages %}
   {% for message in messages %}
     {% if 'agregado' in message.tags %}
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
   {% endfor %}
 {% endif %}
 
-<!-- Gráfico de usuarios -->
+<!-- Users chart -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const ctx = document.getElementById('usuariosRolChart').getContext('2d');

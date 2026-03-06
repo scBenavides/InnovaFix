@@ -9,18 +9,18 @@
 {% endblock %}
 
 {% block content %}
-<!-- Fondo animado con partículas -->
+<!-- Animated particle background -->
 <div id="particles-js"></div>
 
-<!-- Contenedor principal -->
+<!-- Main container -->
 <div class="login-body">
   <div class="screen">
-    <!-- Imagen decorativa -->
+    <!-- Decorative image -->
     <div class="login-image">
       <img src="{% static 'media/imagenesLogin/img.jpg' %}" alt="Imagen Login">
     </div>
 
-    <!-- Formulario -->
+    <!-- Form -->
     <div class="screen__content">
       <form class="login" method="post" novalidate>
         {% csrf_token %}
@@ -36,7 +36,7 @@
           <a href="{% url 'registro' %}" class="top-btn"><i class="fas fa-user-plus"></i> Registrar</a>
         </div>
 
-        <!-- Campos del formulario -->
+        <!-- Form fields -->
         <div class="login__field">
           <label for="id_username" class="sr-only">Usuario</label>
           {{ form.username }}
@@ -47,7 +47,7 @@
           {{ form.password }}
         </div>
 
-        <!-- Botón de iniciar sesión -->
+        <!-- Login button -->
         <button type="submit" class="button login__submit" aria-label="Iniciar sesión">
           <span class="button__text">Iniciar sesión</span>
           <i class="button__icon fas fa-chevron-right"></i>
@@ -63,7 +63,7 @@
   </div>
 </div>
 
-<!-- Script de partículas -->
+<!-- Particles script -->
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
   particlesJS.load('particles-js', '{% static "inicio/particles.json" %}', function() {

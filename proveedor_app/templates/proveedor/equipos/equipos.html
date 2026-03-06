@@ -3,7 +3,7 @@
 <div class="container py-5">
     <h1 class="mb-4">Mantenimiento de Equipos</h1>
 
-    <!-- Buscador y botón -->
+    <!-- Search and action button -->
     <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
         <div class="search-wrapper flex-grow-1 d-flex">
             <input type="text" id="busquedaEquipo" class="form-control search-input" placeholder="Buscar equipo...">
@@ -64,7 +64,7 @@
     </table>
 </div>
 
-<!-- Modal -->
+<!-- Modal dialog -->
 <div class="modal fade" id="equipoModal" tabindex="-1" aria-labelledby="equipoModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -94,7 +94,7 @@
     </div>
 </div>
 
-<!-- Gráfico de equipos -->
+<!-- Equipment chart -->
 <div class="my-4">
     <h4 class="text-center">Estado de equipos</h4>
     <canvas id="equiposEstadoChart" width="200" height="25"></canvas>
@@ -104,7 +104,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Buscador -->
+<!-- Search -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var input = document.getElementById('busquedaEquipo');
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- Confirmación de eliminación -->
+<!-- Delete confirmation -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.btn-confirmar-eliminacion').forEach(function (btn) {
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<!-- Mensajes de éxito -->
+<!-- Success messages -->
 {% if messages %}
   {% for message in messages %}
     {% if 'agregado' in message.tags %}
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
   {% endfor %}
 {% endif %}
 
-<!-- Gráfico de estado de equipos -->
+<!-- Equipment status chart -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const ctx = document.getElementById('equiposEstadoChart').getContext('2d');

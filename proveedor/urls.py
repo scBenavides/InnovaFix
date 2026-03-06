@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('proveedor_app.urls')),     # Ya lo tienes
+    path('', include('proveedor_app.urls')),     # Already included
 
 ]
 if settings.DEBUG:

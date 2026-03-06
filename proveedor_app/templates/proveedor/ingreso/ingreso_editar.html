@@ -8,7 +8,7 @@
     <form method="POST" id="form-editar-ingreso">
         {% csrf_token %}
 
-        <!-- Campos principales del Ingreso -->
+        <!-- Main Ingreso fields -->
         <div class="row mb-3">
             {% for field in form %}
                 <div class="col-md-6">
@@ -23,7 +23,7 @@
 
         <hr>
 
-        <!-- Productos asociados -->
+        <!-- Associated products -->
         <h5 class="mb-3">Productos asociados</h5>
         {{ formset.management_form }}
 
@@ -52,12 +52,12 @@
             </tbody>
         </table>
 
-        <!-- Botón agregar producto -->
+        <!-- Add product button -->
         <button type="button" class="btn btn-secondary mb-3" id="add-product">
             <i class="fa fa-plus"></i> Agregar Producto
         </button>
 
-<!-- Plantilla oculta para nuevos productos -->
+<!-- Hidden template for new products -->
 <template id="empty-form">
     <tr class="producto-fila">
         {% for field in formset.empty_form.visible_fields %}

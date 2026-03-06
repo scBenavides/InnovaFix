@@ -7,7 +7,7 @@ class VistaIngresoInfo(models.Model):
     ingresoId = models.IntegerField(primary_key=True)
     ingresoValor = models.IntegerField()
     ingresoCantidad = models.IntegerField()
-    proveedorNombre = models.CharField(max_length=100)  # nombre del proveedor
+    proveedorNombre = models.CharField(max_length=100)  # supplier name
     direccion = models.CharField(max_length=200)
     usuNombre = models.CharField(max_length=25)
     usuApellido = models.CharField(max_length=25)
@@ -21,7 +21,7 @@ class VistaCompraVenta(models.Model):
     clienteNombre = models.CharField(max_length=50)
     ventaId = models.IntegerField(primary_key=True)
     productoNombre = models.CharField(max_length=50)
-    ventaCantidad = models.IntegerField()  # cantidad del producto en la venta
+    ventaCantidad = models.IntegerField()  # quantity of the product in the sale
     productoPrecioUnidad = models.DecimalField(max_digits=12, decimal_places=2)
 
     class Meta:
@@ -117,7 +117,7 @@ class Usuario(models.Model):
 
 
 class Producto(models.Model):
-    productoId = models.AutoField(primary_key=True) #Ahora es auto incremental
+    productoId = models.AutoField(primary_key=True) # Now auto-incremental
     productoNombre = models.CharField(max_length=25)
     productoPrecioUnidad = models.DecimalField(max_digits=12, decimal_places=2)
     productoCantidad = models.IntegerField()
@@ -125,7 +125,7 @@ class Producto(models.Model):
     ingreso = models.ForeignKey(
         Ingreso,
         on_delete=models.CASCADE,
-        db_column='ingresoId'  # <- Aquí pones el nombre real de la columna en la base de datos
+        db_column='ingresoId'  # <- Real database column name
     )
     class Meta:
         db_table = 'producto'
@@ -138,8 +138,8 @@ class Venta(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     cliente = models.ForeignKey(
         Cliente,
-        to_field="clienteCedula",   # 👈 clave foránea apunta a clienteCedula
-        db_column="clienteCedula",  # 👈 así la columna en la tabla venta se llamará clienteCedula
+        to_field="clienteCedula",   # FK points to clienteCedula
+        db_column="clienteCedula",  # This column in venta will be named clienteCedula
         on_delete=models.CASCADE
     )
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)

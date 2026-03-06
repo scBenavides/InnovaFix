@@ -45,9 +45,9 @@ class ProveedorForm(forms.ModelForm):
 class IngresoForm(forms.ModelForm):
     class Meta:
         model = Ingreso
-        # Campos en el orden deseado
+        # Fields in the desired order
         fields = ['usuCedula', 'proveedorNit', 'ingresoValor', 'ingresoCantidad']
-        # Labels más amigables
+        # More user-friendly labels
         labels = {
             'usuCedula': 'Nombre Usuario',
             'proveedorNit': 'Proveedor',
@@ -252,11 +252,11 @@ class ProductoVentaForm(forms.ModelForm):
 
     def _init_(self, *args, **kwargs):
         super()._init_(*args, **kwargs)
-        # Mostrar solo productos con stock
+        # Show only products with available stock
         self.fields['producto'].queryset = Producto.objects.filter(productoCantidad__gt=0)
         self.fields['producto'].label_from_instance = lambda obj: f"{obj.productoNombre} (Stock: {obj.productoCantidad}, Precio: ${obj.productoPrecioUnidad})"
 
-# Creamos el formset inline para manejar varios ProductoVenta asociados a una Venta
+# Inline formset to manage multiple ProductoVenta rows linked to a Venta
 ProductoVentaFormSet = inlineformset_factory(
     Venta,
     ProductoVenta,
@@ -302,11 +302,11 @@ class EquipoForm(forms.ModelForm):
 }
         
 
-# Formset para Productos asociados al Ingreso
+# Formset for products associated with an Ingreso
 ProductoFormSet = inlineformset_factory(
     Ingreso,
     Producto,
     form=ProductoForm,
-    extra=3,  # Número de formularios adicionales vacíos  
+    extra=3,  # Number of additional empty forms  
     can_delete=True
 )

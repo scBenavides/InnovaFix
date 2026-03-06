@@ -7,7 +7,7 @@
     <h1 class="mb-4">Gestión de Ingresos</h1>
     <hr>
 
-    <!-- Buscador y botón -->
+    <!-- Search and action button -->
     <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
         <div class="search-wrapper flex-grow-1 d-flex">
             <input type="text" id="busquedaIngreso" class="form-control search-input" placeholder="Buscar ingreso...">
@@ -20,7 +20,7 @@
         </button>
     </div>
 
-    <!-- Lista de ingresos -->
+    <!-- Ingresos list -->
     <h2>Ingresos Registrados</h2>
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
@@ -137,7 +137,7 @@
     </div>
 </div>
 
-<!-- JS formset dinámico -->
+<!-- Dynamic JS formset -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const addButton = document.querySelector("#add-form");
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-<!-- SweetAlert2 confirmación -->
+<!-- SweetAlert2 confirmation -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<!-- Mensajes de éxito -->
+<!-- Success messages -->
 {% if messages %}
   {% for message in messages %}
     {% if 'agregado' in message.tags %}
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
   {% endfor %}
 {% endif %}
 
-<!-- CSS modal flotante -->
+<!-- Floating modal CSS -->
 <style>
 .modal-dialog {
     max-width: 800px;

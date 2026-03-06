@@ -8,7 +8,7 @@
     <form method="post" id="form-crear-venta" action="{% url 'venta_crear' %}">
         {% csrf_token %}
 
-        <!-- Campos principales de la venta -->
+        <!-- Main sale fields -->
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">Cliente</label>
@@ -30,7 +30,7 @@
 
         <hr>
 
-        <!-- Productos vendidos (formset) -->
+        <!-- Sold products (formset) -->
         <h5 class="mb-3">Productos Vendidos</h5>
         {{ formset.management_form }}
 
@@ -43,7 +43,7 @@
             {% endfor %}
         </div>
 
-        <!-- Formulario vacío para clonar -->
+        <!-- Empty form template for cloning -->
         <div id="empty-form" style="display:none;">
             <div class="form-row border p-2 mb-2 rounded">
                 {{ formset.empty_form.as_p }}
@@ -65,7 +65,7 @@
 
 </div>
 
-<!-- ===== JS formset dinámico ===== -->
+<!-- ===== Dynamic JS formset ===== -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const addButton = document.querySelector("#add-form");

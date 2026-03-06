@@ -28,7 +28,7 @@ def homepage(request):
     return render(request, 'homepage.html')
 
 # -------------------------------
-# INICIO (requiere login)
+# HOME (login required)
 # -------------------------------
 @login_required
 def inicio(request):
@@ -36,7 +36,7 @@ def inicio(request):
 
 # -------------------------------
 # LOGIN PERSONALIZADO
-# Redirige a inicio si ya está logueado
+# Redirect to start page if already authenticated
 # -------------------------------
 class CustomLoginView(LoginView):
     template_name = 'login.html'
@@ -47,52 +47,67 @@ class CustomLoginView(LoginView):
         return super().dispatch(request, *args, **kwargs)
 
 #----------------------------
-#VISTA 
-#----------------------------
+# REPORT VIEWS #----------------------------
 
 @login_required
 def vista_ingreso_info_listar(request):
-    datos = VistaIngresoInfo.objects.all()
+    datos = _get_ingreso_info_data()
     return render(request, 'proveedor/reportes/vista_ingreso_info.html', {'datos': datos})
 
-#Exportar a Excel
+
+def _get_ingreso_info_data():
+    ingresos = Ingreso.objects.select_related('proveedorNit', 'usuCedula').all()
+    return [
+        {
+            'ingresoId': ingreso.ingresoId,
+            'ingresoValor': ingreso.ingresoValor,
+            'ingresoCantidad': ingreso.ingresoCantidad,
+            'nombre': ingreso.proveedorNit.nombre,
+            'proveedorNombre': ingreso.proveedorNit.nombre,
+            'direccion': ingreso.proveedorNit.direccion,
+            'usuNombre': ingreso.usuCedula.usuNombre,
+            'usuApellido': ingreso.usuCedula.usuApellido,
+            'usuCorreo': ingreso.usuCedula.usuCorreo,
+        }
+        for ingreso in ingresos
+    ]
+
+# Export to Excel
 def exportar_ingreso_info_excel(request):
     from django.http import HttpResponse
     import pandas as pd
 
-    # Obtener los datos de la vista
-    datos = VistaIngresoInfo.objects.all()
+    datos = _get_ingreso_info_data()
 
-    # Crear un DataFrame de pandas
+    # Build a pandas DataFrame
     data = {
-        'ID': [dato.ingresoId for dato in datos],
-        'Valor': [dato.ingresoValor for dato in datos],
-        'Cantidad': [dato.ingresoCantidad for dato in datos],
-        'Nombre': [dato.proveedorNombre for dato in datos],
-        'Dirección': [dato.direccion for dato in datos],
-        'Usuario Nombre': [dato.usuNombre for dato in datos],
-        'Usuario Apellido': [dato.usuApellido for dato in datos],
-        'Usuario Correo': [dato.usuCorreo for dato in datos],
+        'ID': [dato['ingresoId'] for dato in datos],
+        'Valor': [dato['ingresoValor'] for dato in datos],
+        'Cantidad': [dato['ingresoCantidad'] for dato in datos],
+        'Nombre': [dato['nombre'] for dato in datos],
+        'Dirección': [dato['direccion'] for dato in datos],
+        'Usuario Nombre': [dato['usuNombre'] for dato in datos],
+        'Usuario Apellido': [dato['usuApellido'] for dato in datos],
+        'Usuario Correo': [dato['usuCorreo'] for dato in datos],
     }
     df = pd.DataFrame(data)
 
-    # Crear la respuesta HTTP
+    # Build the HTTP response
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="ingreso_info.xlsx"'
 
-    # Exportar a Excel
+    # Export to Excel
     df.to_excel(response, index=False)
 
     return response
 
-# Exportar a PDF
+# Export to PDF
 def exportar_ingreso_info_pdf(request):
     from django.http import HttpResponse
     from django.template.loader import get_template
     from xhtml2pdf import pisa
 
-    # Obtener los datos de la vista
-    datos = VistaIngresoInfo.objects.all()
+    datos = _get_ingreso_info_data()
 
     # Cargar la plantilla HTML
     template = get_template('proveedor/reportes/reporte_ingresoInfo_pdf.html')
@@ -101,11 +116,11 @@ def exportar_ingreso_info_pdf(request):
     }
     html = template.render(context)
 
-    # Crear la respuesta HTTP
+    # Build the HTTP response
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="ingreso_info.pdf"'
 
-    # Convertir HTML a PDF
+    # Convert HTML to PDF
     pisa_status = pisa.CreatePDF(html, dest=response)
     if pisa_status.err:
         return HttpResponse('Error al generar el PDF')
@@ -114,44 +129,56 @@ def exportar_ingreso_info_pdf(request):
 
 @login_required
 def vista_compra_venta_listar(request):
-    datos = VistaCompraVenta.objects.all()
+    datos = _get_compra_venta_data()
     return render(request, 'proveedor/reportes/vista_compra_venta.html', {'datos': datos})
 
-# Exportar a Excel
+
+def _get_compra_venta_data():
+    items = ProductoVenta.objects.select_related('venta__cliente', 'producto').all()
+    return [
+        {
+            'clienteNombre': item.venta.cliente.clienteNombre,
+            'ventaId': item.venta.ventaId,
+            'ventaCantidad': item.cantidad,
+            'productoNombre': item.producto.productoNombre,
+            'productoPrecioUnidad': item.precio_unitario,
+        }
+        for item in items
+    ]
+
+# Export to Excel
 def exportar_compra_venta_excel(request):
     from django.http import HttpResponse
     import pandas as pd
 
-    # Obtener los datos de la vista
-    datos = VistaCompraVenta.objects.all()
+    datos = _get_compra_venta_data()
 
-    # Crear un DataFrame de pandas
+    # Build a pandas DataFrame
     data = {
-        'Cliente Nombre': [dato.clienteNombre for dato in datos],
-        'ID Venta': [dato.ventaId for dato in datos],
-        'Cantidad': [dato.ventaCantidad for dato in datos],
-        'Producto Nombre': [dato.productoNombre for dato in datos],
-        'Producto Precio Unidad': [dato.productoPrecioUnidad for dato in datos],
+        'Cliente Nombre': [dato['clienteNombre'] for dato in datos],
+        'ID Venta': [dato['ventaId'] for dato in datos],
+        'Cantidad': [dato['ventaCantidad'] for dato in datos],
+        'Producto Nombre': [dato['productoNombre'] for dato in datos],
+        'Producto Precio Unidad': [dato['productoPrecioUnidad'] for dato in datos],
     }
     df = pd.DataFrame(data)
 
-    # Crear la respuesta HTTP
+    # Build the HTTP response
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="compra_venta.xlsx"'
 
-    # Exportar a Excel
+    # Export to Excel
     df.to_excel(response, index=False)
 
     return response
 
-# Exportar a PDF
+# Export to PDF
 def exportar_compra_venta_pdf(request):
     from django.http import HttpResponse
     from django.template.loader import get_template
     from xhtml2pdf import pisa
 
-    # Obtener los datos de la vista
-    datos = VistaCompraVenta.objects.all()
+    datos = _get_compra_venta_data()
 
     # Cargar la plantilla HTML
     template = get_template('proveedor/reportes/reporte_compraVenta_pdf.html')
@@ -160,11 +187,11 @@ def exportar_compra_venta_pdf(request):
     }
     html = template.render(context)
 
-    # Crear la respuesta HTTP
+    # Build the HTTP response
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="compra_venta.pdf"'
 
-    # Convertir HTML a PDF
+    # Convert HTML to PDF
     pisa_status = pisa.CreatePDF(html, dest=response)
     if pisa_status.err:
         return HttpResponse('Error al generar el PDF')
@@ -173,43 +200,55 @@ def exportar_compra_venta_pdf(request):
 
 @login_required
 def vista_proceso_ingreso_listar(request):
-    datos = VistaProcesoIngreso.objects.all()
+    datos = _get_proceso_ingreso_data()
     return render(request, 'proveedor/reportes/vista_proceso_ingreso.html', {'datos': datos})
 
-# Exportar a Excel
+
+def _get_proceso_ingreso_data():
+    ingresos = Ingreso.objects.select_related('proveedorNit', 'usuCedula').all()
+    return [
+        {
+            'usuNombre': ingreso.usuCedula.usuNombre,
+            'ingresoId': ingreso.ingresoId,
+            'ingresoValor': ingreso.ingresoValor,
+            'nombre': ingreso.proveedorNit.nombre,
+            'proveedorNombre': ingreso.proveedorNit.nombre,
+        }
+        for ingreso in ingresos
+    ]
+
+# Export to Excel
 def exportar_proceso_ingreso_excel(request):
     from django.http import HttpResponse
     import pandas as pd
 
-    # Obtener los datos de la vista
-    datos = VistaProcesoIngreso.objects.all()
+    datos = _get_proceso_ingreso_data()
 
-    # Crear un DataFrame de pandas
+    # Build a pandas DataFrame
     data = {
-        'Usuario Nombre': [dato.usuNombre for dato in datos],
-        'ID Ingreso': [dato.ingresoId for dato in datos],
-        'Valor': [dato.ingresoValor for dato in datos],
-        'Nombre': [dato.proveedorNombre for dato in datos],
+        'Usuario Nombre': [dato['usuNombre'] for dato in datos],
+        'ID Ingreso': [dato['ingresoId'] for dato in datos],
+        'Valor': [dato['ingresoValor'] for dato in datos],
+        'Nombre': [dato['nombre'] for dato in datos],
     }
     df = pd.DataFrame(data)
 
-    # Crear la respuesta HTTP
+    # Build the HTTP response
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="proceso_ingreso.xlsx"'
 
-    # Exportar a Excel
+    # Export to Excel
     df.to_excel(response, index=False)
 
     return response
 
-# Exportar a PDF
+# Export to PDF
 def exportar_proceso_ingreso_pdf(request):
     from django.http import HttpResponse
     from django.template.loader import get_template
     from xhtml2pdf import pisa
 
-    # Obtener los datos de la vista
-    datos = VistaProcesoIngreso.objects.all()
+    datos = _get_proceso_ingreso_data()
 
     # Cargar la plantilla HTML
     template = get_template('proveedor/reportes/reporte_procesoIngreso_pdf.html')
@@ -218,11 +257,11 @@ def exportar_proceso_ingreso_pdf(request):
     }
     html = template.render(context)
 
-    # Crear la respuesta HTTP
+    # Build the HTTP response
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="proceso_ingreso.pdf"'
 
-    # Convertir HTML a PDF
+    # Convert HTML to PDF
     pisa_status = pisa.CreatePDF(html, dest=response)
     if pisa_status.err:
         return HttpResponse('Error al generar el PDF')
@@ -230,7 +269,7 @@ def exportar_proceso_ingreso_pdf(request):
     return response
 
 #----------------------------
-#VISTA DE REGISTRO
+# REGISTRATION VIEW
 #----------------------------
 
 def registro(request):
@@ -238,13 +277,13 @@ def registro(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')  # O a donde quieras redirigir después de registrar
+            return redirect('login')  # Or redirect anywhere you prefer after registration
     else:
         form = UserCreationForm()
     return render(request, 'registro.html', {'form': form})
 
 #----------------------------
-#VISTA DE PROVEEDOR
+# SUPPLIER VIEW
 #-----------------------------
 
 @login_required
@@ -272,7 +311,7 @@ def proveedor_editar(request, proveedorNit):
         form = ProveedorForm(request.POST, instance=proveedor)
         if form.is_valid():
             form.save()
-            return redirect('proveedor_listar')  # Redirige a la lista de proveedores
+            return redirect('proveedor_listar')  # Redirect to the supplier list
     else:
         form = ProveedorForm(instance=proveedor)
     return render(request, 'proveedor/proveedor/proveedor_editar.html', {'form': form, 'proveedor':proveedor})
@@ -288,7 +327,7 @@ def proveedor_eliminar(request, id):
     return redirect('proveedor_listar')
 
 #----------------------------
-# VISTA DE ROL
+# ROLE VIEW
 #-----------------------------
 
 @login_required
@@ -317,7 +356,7 @@ def rol_eliminar(request, rolId):
     return redirect('rol_listar')
 
 #----------------------------
-#VISTA DE CLIENTE
+# CLIENT VIEW
 #-----------------------------
 
 @login_required
@@ -355,13 +394,13 @@ def cliente_editar(request, clienteCedula):
         form = ClienteForm(request.POST, instance=cliente)
         if form.is_valid():
             form.save()
-            return redirect('cliente_listar')  # Redirige a la lista de clientes
+            return redirect('cliente_listar')  # Redirect to the client list
     else:
         form = ClienteForm(instance=cliente)
     return render(request, 'proveedor/cliente/cliente_editar.html', {'form': form, 'cliente':cliente})
 
 #----------------------------
-#VISTA DE USUARIOS
+# USER VIEW
 #-----------------------------
 
 @login_required
@@ -410,13 +449,13 @@ def usuario_editar(request, usuCedula):
         form = UsuarioForm(request.POST, instance=usuario)
         if form.is_valid():
             form.save()
-            return redirect('usuario_listar')  # Redirige a la lista de usuarios
+            return redirect('usuario_listar')  # Redirect to the user list
     else:
         form = UsuarioForm(instance=usuario)
     return render(request, 'proveedor/usuario/usuario_editar.html', {'form': form, 'usuario':usuario})
 
 # ==============================
-# LISTAR INGRESOS
+# LIST INTAKES
 # ==============================
 @login_required
 def ingreso_listar(request):
@@ -434,7 +473,7 @@ def ingreso_listar(request):
 
 
 # ==============================
-# CREAR INGRESO + PRODUCTOS
+# CREATE INTAKE + PRODUCTS
 # ==============================
 @login_required
 def ingreso_crear(request):
@@ -467,7 +506,7 @@ def ingreso_crear(request):
 
 
 # ==============================
-# EDITAR INGRESO + PRODUCTOS
+# EDIT INTAKE + PRODUCTS
 # ==============================
 @login_required
 def ingreso_editar(request, id):
@@ -496,7 +535,7 @@ def ingreso_editar(request, id):
 
 
 # ==============================
-# ELIMINAR INGRESO
+# DELETE INTAKE
 # ==============================
 @login_required
 def ingreso_eliminar(request, id):
@@ -509,7 +548,7 @@ def ingreso_eliminar(request, id):
 
 
 # ==============================
-# EXPORTAR INGRESOS A EXCEL
+# EXPORT INTAKES TO EXCEL
 # ==============================
 @login_required
 def exportar_ingresos_excel(request):
@@ -535,7 +574,7 @@ def exportar_ingresos_excel(request):
 
 
 # ==============================
-# EXPORTAR INGRESOS A PDF
+# EXPORT INTAKES TO PDF
 # ==============================
 @login_required
 def exportar_ingresos_pdf(request):
@@ -557,10 +596,10 @@ def exportar_ingresos_pdf(request):
     return response
 
 #----------------------------
-# VISTA DE PRODUCTO
+# PRODUCT VIEW
 #-----------------------------
 
-# Generador automático de productoId
+# Automatic productId generator
 def generar_producto_id():
     ultimo = Producto.objects.order_by('-productoId').first()
     if ultimo and str(ultimo.productoId).startswith('PRD'):
@@ -582,7 +621,7 @@ def producto_listar(request):
             producto_obj = form.save(commit=False)
             producto_obj.productoId = generar_producto_id()
 
-            # Verificar si ya existe un producto con ese ID
+            # Check whether a product with that ID already exists
             if Producto.objects.filter(productoId=producto_obj.productoId).exists():
                 error_id = True
                 messages.error(request, "❌ El ID del producto ya existe.")
@@ -603,7 +642,7 @@ def producto_listar(request):
     })
 
 #----------------------------
-# ELIMINAR PRODUCTO
+# DELETE PRODUCT
 #-----------------------------
 @login_required
 @require_POST
@@ -614,12 +653,12 @@ def producto_eliminar(request, producto_id):
     return redirect('producto_listar')
 
 #----------------------------
-# VISTA DE LISTAR VENTAS
+# SALES LIST VIEW
 #-----------------------------
 
 @login_required
 def venta_listar(request):
-    ventas = Venta.objects.all().order_by('-fecha')  # orden descendente por fecha
+    ventas = Venta.objects.all().order_by('-fecha')  # Descending order by date
     form = VentaForm()
     formset = ProductoVentaFormSet()
     productos = Producto.objects.all()
@@ -636,7 +675,7 @@ def venta_listar(request):
     return response
 
 #----------------------------
-# VISTA DE REGISTRAR VENTAS
+# SALES CREATION VIEW
 #-----------------------------
 
 @login_required
@@ -659,7 +698,7 @@ def registrar_venta(request):
                 total += p.subtotal
                 p.save()
 
-                # actualizar stock del producto
+                # Update product stock
                 p.producto.productoCantidad -= p.cantidad
                 p.producto.save()
 
@@ -685,7 +724,7 @@ def registrar_venta(request):
     })
 
 #----------------------------
-# VISTA DE ELIMINAR VENTAS
+# SALES DELETE VIEW
 #-----------------------------
 
 @login_required
@@ -697,7 +736,7 @@ def venta_eliminar(request, ventaId):
     return redirect('venta_listar')
 
 #----------------------------
-# EXPORTAR A EXCEL
+# EXPORT TO EXCEL
 #-----------------------------
 
 def exportar_ventas_excel(request):
@@ -726,7 +765,7 @@ def exportar_ventas_excel(request):
 
 
 #----------------------------
-# EXPORTAR A PDF
+# EXPORT TO PDF
 #-----------------------------
 
 def exportar_ventas_pdf(request):
@@ -749,7 +788,7 @@ def exportar_ventas_pdf(request):
 
 
 #----------------------------
-# VISTA DE EQUIPOS
+# EQUIPMENT VIEW
 #-----------------------------
 
 @login_required
@@ -773,9 +812,9 @@ def equipo_listar(request):
     estados_data = list(contador_estados.values())
 
     colores_por_estado = {
-        "Pendiente": "rgba(255, 99, 132, 0.7)",     # rojo
-        "En Proceso": "rgba(255, 206, 86, 0.7)",   # amarillo
-        "Completado": "rgba(75, 192, 192, 0.7)",   # verde
+        "Pendiente": "rgba(255, 99, 132, 0.7)",     # red
+        "En Proceso": "rgba(255, 206, 86, 0.7)",   # yellow
+        "Completado": "rgba(75, 192, 192, 0.7)",   # green
     }
 
     colores_barras = [colores_por_estado.get(estado, "rgba(201, 203, 207, 0.7)") for estado in estados_labels]
@@ -805,7 +844,7 @@ def equipo_editar(request, equipoId):
         form = EquipoForm(request.POST, instance=equipo)
         if form.is_valid():
             form.save()
-            return redirect('equipo_listar')  # Redirige a la lista de equipos
+            return redirect('equipo_listar')  # Redirect to the equipment list
     else:
         form = EquipoForm(instance=equipo)
     return render(request, 'proveedor/equipos/equipo_editar.html', {'form': form, 'equipo':equipo})

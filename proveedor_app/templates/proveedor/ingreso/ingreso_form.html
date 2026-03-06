@@ -8,7 +8,7 @@
     <form method="post" action="{% url 'ingreso_crear' %}">
         {% csrf_token %}
 
-        <!-- Campos del ingreso -->
+        <!-- Ingreso fields -->
         <div class="card mb-4">
             <div class="card-header">
                 Datos del Ingreso
@@ -18,10 +18,10 @@
             </div>
         </div>
 
-        <!-- Campos ocultos del formset -->
+        <!-- Hidden formset fields -->
         {{ formset.management_form }}
 
-        <!-- Productos -->
+        <!-- Products -->
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 Productos
@@ -36,13 +36,13 @@
             </div>
         </div>
 
-        <!-- Botón Guardar -->
+        <!-- Save button -->
         <button type="submit" class="btn btn-primary">Guardar</button>
         <a href="{% url 'ingreso_listar' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 
-<!-- Script para clonar formularios del formset -->
+<!-- Script to clone formset forms -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     let formsetContainer = document.getElementById("productos-formset");
@@ -55,17 +55,17 @@ document.addEventListener("DOMContentLoaded", function () {
         let currentForms = parseInt(totalForms.value);
         let newForm = formsetContainer.querySelector(".formset-form").cloneNode(true);
 
-        // Limpiar valores de los inputs del nuevo producto
+        // Clear input values for the new product
         newForm.querySelectorAll("input, textarea").forEach(input => {
             input.value = "";
         });
 
-        // Reemplazar los índices (producto_set-0-, producto_set-1-, etc.)
+        // Replace indices (producto_set-0-, producto_set-1-, etc.)
         newForm.innerHTML = newForm.innerHTML.replace(/producto_set-(\d+)-/g, "producto_set-" + currentForms + "-");
 
         formsetContainer.appendChild(newForm);
 
-        //  Actualizar TOTAL_FORMS
+        // Update TOTAL_FORMS
         totalForms.value = currentForms + 1;
     });
 });

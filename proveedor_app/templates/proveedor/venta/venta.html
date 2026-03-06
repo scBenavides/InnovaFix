@@ -5,7 +5,7 @@
 <div class="container mt-4">
 <h2>Ventas</h2>
 
-<!-- Buscador y botón -->
+<!-- Search and action button -->
 <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
     <div class="search-wrapper flex-grow-1 d-flex">
         <input type="text" id="busquedaVenta" class="form-control search-input" placeholder="Buscar venta...">
@@ -20,7 +20,7 @@
     </div>
 </div>
 
-<!-- Tabla de ventas -->
+<!-- Sales table -->
 <table class="table table-bordered">
     <thead class="table-light">
         <tr>
@@ -52,7 +52,7 @@
 </table>
 </div>
 
-<!-- Modal para registrar venta -->
+<!-- Modal for creating a sale -->
 <div class="modal fade" id="ventaModal" tabindex="-1" aria-labelledby="ventaModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -113,7 +113,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Confirmación de eliminación
+    // Delete confirmation
     document.querySelectorAll('.btn-confirmar-eliminacion').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const form = btn.closest('form');
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Actualización de filas y total
+    // Row and total update
     function updateRow(row) {
         const productoSelect = row.querySelector('select');
         const cantidadInput = row.querySelector('input[name$="cantidad"]');
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<!-- Mensajes de éxito -->
+<!-- Success messages -->
 {% if messages %}
   {% for message in messages %}
     {% if 'agregado' in message.tags %}

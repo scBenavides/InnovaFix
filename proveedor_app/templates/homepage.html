@@ -122,7 +122,7 @@
     </div>
   </footer>
 
-  <!-- Script para ocultar el header al hacer scroll -->
+  <!-- Script to hide the header on scroll -->
   <script>
     let lastScrollTop = 0;
     const header = document.querySelector("header");
@@ -139,7 +139,7 @@
       lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
     });
 
-    // Scroll suave para el botón "Leer más"
+    // Smooth scrolling for the "Read more" button
     document.querySelector('a[href="#nosotros"]').addEventListener('click', function(e) {
       e.preventDefault();
       const target = document.querySelector('#nosotros');

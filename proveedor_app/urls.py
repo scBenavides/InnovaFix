@@ -9,27 +9,27 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.homepage, name='homepage'),
 
-    # Autenticación
+    # Authentication
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
 
-    # Registro
+    # Registration
     path('registro/', views.registro, name='registro'),
 
-    # Inicio
+    # Home
     path('inicio/', views.inicio, name='inicio'),
         
-    # Proveedor
+    # Supplier
     path('proveedores/', views.proveedor_listar, name='proveedor_listar'),
     path('proveedor/eliminar/<str:id>/', views.proveedor_eliminar, name='proveedor_eliminar'),
     path('proveedores/<str:proveedorNit>/editar/', views.proveedor_editar, name='proveedor_editar'),
 
-    # Usuario
+    # User
     path('usuarios/', views.usuario_listar, name='usuario_listar'),
     path('usuario/eliminar/<str:usuCedula>/', views.usuario_eliminar, name='usuario_eliminar'),
     path('usuarios/<str:usuCedula>/editar/', views.usuario_editar, name='usuario_editar'),
 
-    # Ingreso
+    # Intake
     path('ingresos/', views.ingreso_listar, name='ingreso_listar'),
     path('ingreso/editar/<int:id>/', views.ingreso_editar, name='ingreso_editar'),
     path('ingreso/crear/', views.ingreso_crear, name='ingreso_crear'),
@@ -53,17 +53,17 @@ urlpatterns = [
     path('exportar_ventas_excel/', views.exportar_ventas_excel, name='exportar_ventas_excel'),
     path('exportar_ventas_pdf/', views.exportar_ventas_pdf, name='exportar_ventas_pdf'),
 
-    #Cliente
+    # Client
     path('clientes/', views.cliente_listar, name='cliente_listar'),
     path('cliente/eliminar/<str:clienteCedula>/', views.cliente_eliminar, name='cliente_eliminar'),
     path('clientes/<str:clienteCedula>/editar/', views.cliente_editar, name='cliente_editar'),
 
-    #Equipo
+    # Equipment
     path('equipos/', views.equipo_listar, name='equipo_listar'),
     path('equipo/eliminar/<int:pk>/', views.equipo_eliminar, name='equipo_eliminar'),
     path('equipos/<int:equipoId>/editar/', views.equipo_editar, name='equipo_editar'),
 
-    #vistas de reportes
+    # Report views
     path('reportes/vista_ingreso_info/', views.vista_ingreso_info_listar, name='vista_ingreso_info_listar'),
     path('reportes/vista_compra_venta/', views.vista_compra_venta_listar, name='vista_compra_venta_listar'),
     path('reportes/vista_proceso_ingreso/', views.vista_proceso_ingreso_listar, name='vista_proceso_ingreso_listar'),
@@ -76,6 +76,6 @@ urlpatterns = [
 
 ]
 
-# Configuración de archivos media solo en desarrollo
+# Media files configuration (development only)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

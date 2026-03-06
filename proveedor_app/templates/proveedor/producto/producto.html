@@ -3,7 +3,7 @@
 <div class="container py-5">
     <h1 class="mb-4">Gestión de Productos</h1>
 
-    <!-- Buscador y botón -->
+    <!-- Search and action button -->
     <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
         <div class="search-wrapper flex-grow-1 d-flex">
             <input type="text" id="busquedaProducto" class="form-control search-input" placeholder="Buscar producto...">
@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <!-- Tabla de productos -->
+    <!-- Products table -->
 <div class="table-responsive">
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
@@ -58,7 +58,7 @@
     </table>
 </div>
 
-<!-- Modal de formulario -->
+<!-- Form modal -->
 <div class="modal fade" id="productoModal" tabindex="-1" aria-labelledby="productoModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Confirmación de eliminación -->
+<!-- Delete confirmation -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.btn-confirmar-eliminacion').forEach(function (btn) {
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<!-- Mensajes de éxito -->
+<!-- Success messages -->
 {% if messages %}
   {% for message in messages %}
     {% if 'agregado' in message.tags %}
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
   {% endfor %}
 {% endif %}
 
-<!-- SweetAlert2 para errores de ID duplicado -->
+<!-- SweetAlert2 for duplicate ID errors -->
 {% if error_id %}
 <script>
   Swal.fire({
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 {% endif %}
 
-<!-- CSS modal flotante y z-index -->
+<!-- Floating modal CSS and z-index -->
 <style>
 .modal-dialog {
     max-width: 800px;

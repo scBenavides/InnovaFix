@@ -1,0 +1,256 @@
+/* === Fondo animado de partículas === */
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* === Contenedor principal con fondo translúcido */
+.container {
+  background: rgba(255, 255, 255, 0.85); /* blanco translúcido */
+  border-radius: 12px;
+  padding: 40px 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+/* === TÍTULOS === */
+h1, h2 {
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 700;
+    color: #525252;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* === INPUT DE BÚSQUEDA === */
+#busquedaUsuario {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+#busquedaUsuario:focus {
+    border-color:#7b7b7e31;
+    box-shadow: 0 0 8px rgba(0, 102, 255, 0.231);
+}
+
+/* === BOTONES === */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color:#525252;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color:#48CFBC
+}
+
+.btn-danger {
+    background-color: #525252;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #229799;
+}
+
+.btn-success {
+    background-color: #525252;
+    border: none;
+}
+
+.btn-success:hover {
+    background-color:#229799;
+}
+
+/* === MODAL === */
+.modal-content {
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgb(8, 8, 8);
+}
+.modal-header {
+    background-color:#229799;
+    color: #ffffff;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+/* === FORMULARIO === */
+.modal-body .mb-3 label {
+    font-weight: 600;
+    color: black;
+}
+
+.modal-body .mb-3 input,
+.modal-body .mb-3 select,
+.modal-body .mb-3 textarea {
+    border-radius: 6px;
+    border: 1px solid #5252527e;
+    padding: 10px;
+    width: 100%;
+    font-size: 15px;
+}
+
+/* === TABLA DE USUARIOS === */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.table th {
+    background-color: #229799;
+    color:#ffffff;
+    text-align: center;
+    font-weight: 600;
+}
+
+.table td {
+    text-align: center;
+    vertical-align: middle;
+    background-color: rgba(255, 255, 255, 0.95); /* fondo blanco suave para ver partículas */
+}
+
+/* === MENSAJE DE TABLA VACÍA === */
+.table td.text-center {
+    font-style: italic;
+    color: #6c757d;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .table th, .table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background-color: #48CFBC;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgb(0, 0, 0);
+    z-index: 1000;
+}
+
+.sidebar .nav-link {
+    color: #ffffff; 
+    font-weight: 500;
+    font-family: 'Josefin Sans', sans-serif;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #e9ecef;
+    color: #212529;
+    text-decoration: none;
+}
+
+.logo-innova {
+    width: 160px;
+    height: auto;
+    margin-bottom: 30px;
+}
+
+.content {
+    margin-left: 240px; /* espacio para la barra lateral */
+    padding: 30px;
+}
+
+.btn-logout {
+    background-color: #FDE74C;
+    color: #212529;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-family: 'Josefin Sans', sans-serif;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-logout:hover {
+    background-color: #fde84c5e;
+    transform: scale(1.03);
+    color: #212529;
+}
+
+.btn-trash {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-family: 'Josefin Sans', sans-serif;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-trash i {
+    font-size: 16px;
+}
+
+.btn-trash:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+/* === Tabla con fondo translúcido */
+.table-responsive {
+  background-color: rgba(255, 255, 255, 0.9); /* fondo blanco con transparencia */
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+table {
+    width: 100%;
+    min-width: 900px;
+    font-size: 14px;
+}
+
+/* === Celdas de tabla con fondo blanco suave */
+.table td {
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+/* === Encabezado de tabla con color sólido para contraste */
+.table th {
+  background-color: #229799;
+  color: #ffffff;
+}

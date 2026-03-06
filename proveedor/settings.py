@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+import os 
+from pathlib import Path
 
 # Application definition
 
@@ -82,14 +84,16 @@ WSGI_APPLICATION = 'proveedor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'innovafix',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': os.environ.get('DB_NAME', 'innovafix_db'),
+        'USER': os.environ.get('DB_USER', 'user_admin'),
+        'PASSWORD': os.environ.get('DB_PASS', 'password123'),
+        'HOST': os.environ.get('DB_HOST', 'db'),  # 'db' is the Docker Compose service name
+        'PORT': os.environ.get('DB_PORT', '3306'),
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -121,14 +125,14 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Redirección después del login
-LOGIN_REDIRECT_URL = '/inicio/'  # A dónde te manda después del login
-LOGOUT_REDIRECT_URL = '/login/'  # A dónde te manda después del logout
+# Redirect after login
+LOGIN_REDIRECT_URL = '/inicio/'  # Where users are redirected after login
+LOGOUT_REDIRECT_URL = '/login/'  # Where users are redirected after logout
 
-# Ruta del login si no está autenticado
+# Login URL when the user is not authenticated
 LOGIN_URL = '/login/'
 
-SESSION_COOKIE_AGE = 1800  # 30 minutos en segundos
+SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
@@ -136,8 +140,8 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'proveedor_app' / 'static']
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') # Nginx will look here
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -147,8 +151,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import os
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'proveedor_app/static/media')
 # Ensure that the media directory exists
 if not os.path.exists(MEDIA_ROOT):
     os.makedirs(MEDIA_ROOT)
