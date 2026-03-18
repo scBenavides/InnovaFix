@@ -103,3 +103,4 @@ innovafix/
 
 - If this is your first run, execute setup commands in order.
 - If static assets do not update, rerun `collectstatic` and refresh your browser cache.
+# InnovaFix
