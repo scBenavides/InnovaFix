@@ -132,6 +132,8 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
+.env.example.local
 .venv
 env/
 venv/
@@ -171,3 +173,7 @@ cython_debug/
 #.idea/
 
 # End of https://www.toptal.com/developers/gitignore/api/django
+media/
+staticfiles/
+static/media/
+proveedor_app/static/media/

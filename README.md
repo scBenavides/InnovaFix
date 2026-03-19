@@ -15,7 +15,7 @@ Innovafix is a web-based inventory and supplier management platform built with D
 The project runs in three containers:
 
 - `db`: MySQL 8.0 database service.
-- `web`: Django application service (Gunicorn-ready in `dockerfile`; currently started with `runserver` in `docker-compose.yml`).
+- `web`: Django application service.
 - `nginx`: Reverse proxy in front of the Django service.
 
 ## Prerequisites
@@ -25,25 +25,33 @@ The project runs in three containers:
 
 ## Installation and Setup
 
-1. Build and start all services:
+1. Create your local environment file:
+
+```bash
+cp .env.example .env
+```
+
+2. Edit `.env` and replace every placeholder secret with your own values.
+
+3. Build and start all services:
 
 ```bash
 docker compose up -d --build
 ```
 
-2. Apply database migrations:
+4. Apply database migrations:
 
 ```bash
 docker compose exec web python manage.py migrate
 ```
 
-3. Create an admin user:
+5. Create an admin user:
 
 ```bash
 docker compose exec web python manage.py createsuperuser
 ```
 
-4. Collect static files:
+6. Collect static files:
 
 ```bash
 docker compose exec web python manage.py collectstatic --noinput
@@ -57,25 +65,13 @@ docker compose exec web python manage.py collectstatic --noinput
 
 ## Environment Variables
 
-### Database container (`db`)
-
-- `MYSQL_DATABASE=innovafix_db`
-- `MYSQL_USER=user_admin`
-- `MYSQL_PASSWORD=password123`
-- `MYSQL_ROOT_PASSWORD=root_password`
-
-### Django container (`web`)
-
-- `DB_NAME=innovafix_db`
-- `DB_USER=user_admin`
-- `DB_PASS=password123`
-- `DB_HOST=db`
-- `DB_PORT=3306`
+Use `.env.example` as the template for local configuration. Do not commit real credentials, secrets, generated static files, or uploaded media files.
 
 ## Project Structure
 
 ```text
 innovafix/
+├── .env.example
 ├── docker-compose.yml
 ├── dockerfile
 ├── manage.py
@@ -103,4 +99,4 @@ innovafix/
 
 - If this is your first run, execute setup commands in order.
 - If static assets do not update, rerun `collectstatic` and refresh your browser cache.
-# InnovaFix
+- Rotate any credentials that were previously committed before publishing the project again.
