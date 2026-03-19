@@ -9,12 +9,19 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
     volumes:
       - mysql_data:/var/lib/mysql
 
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
+    restart: unless-stopped
     env_file:
       - .env
     volumes:
@@ -22,15 +29,17 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   nginx:
     image: nginx:latest
+    restart: unless-stopped
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - .:/app
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - web
 

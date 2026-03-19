@@ -59,9 +59,9 @@ docker compose exec web python manage.py collectstatic --noinput
 
 ## Access
 
-- Through Nginx: `http://localhost`
+- Through Nginx: `http://localhost:8080`
 - Directly to Django app: `http://localhost:8000`
-- Django admin: `http://localhost/admin` or `http://localhost:8000/admin`
+- Django admin: `http://localhost:8080/admin` or `http://localhost:8000/admin`
 
 ## Environment Variables
 
